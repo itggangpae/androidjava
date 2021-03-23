@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".TextActivity"
+    android:orientation="vertical">
+
+    <TextView
+        android:id = "@+id/txtView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text = "텍스트 뷰"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/google" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text = "@string/ego" />
+
+    <EditText
+        android:id = "@+id/txtId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint = "아이디를 입력해주세요"
+        android:inputType="text"/>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:password="true"
+        android:id="@+id/txtPassword" />
+
+</LinearLayout>
