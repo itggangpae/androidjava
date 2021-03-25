@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="dbms">
+        <item>Oracle</item>
+        <item>HANA DB</item>
+        <item>IBM DB2</item>
+        <item>Tibero</item>
+        <item>MySQL(Maria DB)</item>
+        <item>MSSQL Server</item>
+
+        <item>ACCESS</item>
+
+        <item>SQLite</item>
+
+        <item>Mongo DB</item>
+        <item>Firebase</item>
+        <item>Cassadra</item>
+        <item>HBase</item>
+    </string-array>
+
+</resources>

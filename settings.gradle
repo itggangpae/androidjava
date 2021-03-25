@@ -1,3 +1,4 @@
+include ':resourceuse'
 include ':eventhandling'
 include ':userinterface'
 include ':app'
