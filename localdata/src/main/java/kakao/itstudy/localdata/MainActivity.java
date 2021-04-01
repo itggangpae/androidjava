@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     //출력
                     editText.setText(new String(data));
                 }catch(Exception e){
-                    Log.e("예외", e.getLocalizedMessage());
+                    Log.e("예외 발생", e.getLocalizedMessage());
                 }
 
             }
