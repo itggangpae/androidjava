@@ -19,8 +19,10 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -48,6 +50,15 @@ public class ItemPostActivity extends AppCompatActivity {
                         str = "데이터 삽입 성공";
                     }else{
                         str = "데이터 삽입 실패";
+                    }
+                    break;
+                case 2:
+                    //삽입 결과를 가져옵니다.
+                    boolean deleteResult = (Boolean)msg.obj;
+                    if(deleteResult == true){
+                        str = "데이터 삭제 성공";
+                    }else{
+                        str = "데이터 삭제 실패";
                     }
                     break;
             }
@@ -251,7 +262,58 @@ public class ItemPostActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
+                new Thread(){
+                    public void run(){
+                        try{
+                            //URL 생성
+                            URL url = new URL("http://cyberadam.cafe24.com/item/delete");
+                            //연결 객체 생성
+                            HttpURLConnection con =
+                                    (HttpURLConnection)url.openConnection();
 
+                            //옵션 설정
+                            con.setConnectTimeout(30000);
+                            con.setUseCaches(false);
+
+                            con.setRequestMethod("POST");
+
+
+                            //파일이 없을 때 POST 방식의 파라미터 전송
+                            //itemid 이고 정수입니다.
+                            String data = URLEncoder.encode("itemid", "UTF-8") + "="
+                                    + URLEncoder.encode("7", "UTF-8");
+                            //파라미터 전송
+                            OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+                            wr.write(data);
+                            wr.flush();
+
+                            //결과 받아오기
+                            //스트림 생성
+                            BufferedReader br = new BufferedReader(
+                                    new InputStreamReader(con.getInputStream()));
+                            StringBuilder sb = new StringBuilder();
+                            while(true){
+                                String line = br.readLine();
+                                if(line == null){
+                                    break;
+                                }
+                                sb.append(line + "\n");
+                            }
+
+                            JSONObject jsonObject = new JSONObject(sb.toString());
+                            boolean result = jsonObject.getBoolean("result");
+
+                            Message msg = new Message();
+                            msg.obj = result;
+                            msg.what = 2;
+                            handler.sendMessage(msg);
+
+
+                        }catch(Exception e){
+                            Log.e("삭제 예외", e.getLocalizedMessage());
+                        }
+                    }
+                }.start();
             }
         });
     }

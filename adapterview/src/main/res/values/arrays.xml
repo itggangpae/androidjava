@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="oop">
+        <item>Encapsulation-캡슐화</item>
+        <item>Inheritance-상속</item>
+        <item>Polymorphism-다형성</item>
+        <item>Information Hidden-정보 은닉</item>
+        <item>Abstract-추상</item>
+    </string-array>
+</resources>
