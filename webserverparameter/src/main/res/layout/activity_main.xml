@@ -4,34 +4,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ParsingActivity"
+    tools:context=".MainActivity"
     android:orientation="vertical">
-
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id = "@+id/btnHTML"
-        android:text="HTML Parsing"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id = "@+id/btnXML"
-        android:text="XML Parsing"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id = "@+id/btnJSON"
-        android:text="JSON Parsing"/>
-
+        android:text="Kakao 도서 검색 API 사용"
+        android:id="@+id/btnKakao" />
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/result"/>
+            android:id="@+id/tfResult"/>
     </ScrollView>
-
 
 </LinearLayout>
