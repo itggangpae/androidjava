@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity {
     //ListView 출력을 위한 프로퍼티
     ListView listView;
     //데이터 모임과 Adapter의 제너릭은 항상 일치
-    ArrayList<String> list;
+    ArrayList<String> list  ;
     ArrayAdapter<CharSequence> adapter;
 
     @Override
