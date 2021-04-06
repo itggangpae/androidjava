@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -50,9 +51,18 @@ public class ListViewActivity extends AppCompatActivity {
          */
 
         //라디오 버튼을 옆에 배치하는 모양으로 설정
+        /*
         adapter = new ArrayAdapter<>(
                 ListViewActivity.this,
                 android.R.layout.simple_list_item_single_choice,
+                list);
+
+         */
+
+        //체크 박스 버튼을 옆에 배치하는 모양으로 설정
+        adapter = new ArrayAdapter<>(
+                ListViewActivity.this,
+                android.R.layout.simple_list_item_multiple_choice,
                 list);
 
         //ListView에 Adapter 설정
@@ -62,7 +72,8 @@ public class ListViewActivity extends AppCompatActivity {
         listview.setDivider(new ColorDrawable(Color.CYAN));
         listview.setDividerHeight(3);
         //listview의 선택모드 설정
-        listview.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        //listview.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        listview.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
         //ListView에서 항목을 클릭했을 때 처리
         listview.setOnItemClickListener(
@@ -123,6 +134,8 @@ public class ListViewActivity extends AppCompatActivity {
         btndelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //하나를 선택할 수 있을 때 삭제 처리
+                /*
                 //작업을 수행할 데이터 유효성 검사
                 //선택된 항목의 인덱스를 찾아오기
                 int pos = listview.getCheckedItemPosition();
@@ -139,6 +152,28 @@ public class ListViewActivity extends AppCompatActivity {
                 list.remove(pos);
                 adapter.notifyDataSetChanged();
                 listview.clearChoices();
+                */
+
+                //여러 개 선택해서 삭제
+                //선택 항목 관련 정보를 가져옴
+                SparseBooleanArray sb = listview.getCheckedItemPositions();
+                //유효성 검사
+                if(sb.size() <= 0){
+                    Snackbar.make(getWindow().getDecorView().getRootView(),
+                            "리스트 뷰에 데이터가 없습니다.", Snackbar.LENGTH_LONG)
+                            .show();
+                    return;
+                }
+                //배열 순회
+                //배열을 순회하면서 true 이면 삭제
+                //앞에서부터 진행하면 안되고 뒤에서부터 진행
+                for(int i=listview.getCount() - 1; i >= 0; i--){
+                    if(sb.get(i) == true){
+                        list.remove(i);
+                    }
+                }
+                listview.clearChoices();
+                adapter.notifyDataSetChanged();
 
                 //수행 결과를 출력
                 Snackbar.make(getWindow().getDecorView().getRootView(),
