@@ -7,4 +7,12 @@
         <item>Information Hidden-정보 은닉</item>
         <item>Abstract-추상</item>
     </string-array>
+    <string-array name="dbms">
+        <item>Oracle</item>
+        <item>MySQL(Maria DB)</item>
+        <item>MS-SQL Server</item>
+        <item>MongoDB</item>
+        <item>Firebase</item>
+        <item>SQLite</item>
+    </string-array>
 </resources>
