@@ -3,6 +3,7 @@ package kakao.itstudy.adapterview;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.graphics.Canvas;
@@ -16,6 +17,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -56,6 +58,8 @@ public class MovieListActivity extends AppCompatActivity {
             adapter.notifyDataSetChanged();
             //진행 상황을 나타내는 뷰를 사라지게 합니다.
             downloadview.setVisibility(View.INVISIBLE);
+            //스레드 변수를 초기화
+            th = null;
         }
     };
 
@@ -126,7 +130,11 @@ public class MovieListActivity extends AppCompatActivity {
                     movie.setThumbnail(item.getString("thumbnail"));
 
                     //파싱한 데이터를 List에 대입
-                    movieList.add(movie);
+                    //마지막에 추가
+                    //movieList.add(movie);
+
+                    //첫번째에 추가
+                    movieList.add(0, movie);
                 }
                 Log.e("파싱한 데이터", movieList.toString());
 
@@ -176,9 +184,13 @@ public class MovieListActivity extends AppCompatActivity {
         downloadview.setVisibility(View.VISIBLE);
         //다운로드 받고 JSON 파싱을 수행한 후 재출력을 위해서 핸들러를 호출하는
         //스레드를 생성하고 실행
-        new Thread(){
-
-        }.start();
+        //이전 스레드가 동작 중이면 중지
+        if(th != null){
+            return;
+        }
+        //이전 스레드가 없다면 스레드를 생성해서 데이터 가져오기를 수행
+        th = new ThreadEx();
+        th.start();
 
         //ListView의 항목을 클릭했을 때 이벤트 처리
         listView.setOnItemClickListener(
@@ -197,6 +209,83 @@ public class MovieListActivity extends AppCompatActivity {
                 intent.putExtra("link", link);
                 //하위 Activity 출력
                 startActivity(intent);
+            }
+        });
+
+        //listview의 Scroll 이벤트 처리
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            //스크롤 상태가 변경될 때 호출되는 메소드 - 다음 페이지 데이터를 가져오기를 수행
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if(scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE
+                && lastItemVisibleFlag == true){
+                    //페이지 번호를 증가
+                    page = page + 1;
+                    //전체 데이터를 출력했는지 확인
+                    //10은 페이지 당 데이터 개수
+                    if(page * 10 >= count){
+                        Snackbar.make(view, "더 이상 데이터가 없습니다.",
+                                Snackbar.LENGTH_LONG).show();
+                        return;
+                    }
+                    //스레드가 동작 중이면 중지
+                    if(th != null){
+                        return;
+                    }
+                    //스레드가 동작 중이 아닐 때 만 작업을 수행
+                    downloadview.setVisibility(View.VISIBLE);
+                    th = new ThreadEx();
+                    th.start();
+
+                }
+            }
+
+
+            //firstVisibleItem 은 현재 보여지고 있는 항목 중에서 첫번째 항목의 인덱스
+            //visibleItemCount 는 보여지고 있는 데이터의 개수
+            //totalItemCount 는 전체 데이터 개수
+            @Override
+            public void onScroll(
+                    AbsListView view, int firstVisibleItem,
+                    int visibleItemCount, int totalItemCount) {
+                //마지막에서 스크롤 한 것인지 판단 여부를 저장하는 프로퍼티의 값 설정
+
+                //데이터 가 있고 첫번째 인덱스와 보여진 데이터 개수를 더한 값이
+                //전체 데이터 개수보다 크거나 같다면 lastItemVisibleFlag는 true
+                lastItemVisibleFlag = totalItemCount > 0
+                        && firstVisibleItem + visibleItemCount >= totalItemCount;
+            }
+        });
+
+        //스와이프 레이아웃의 리프레시 이벤트 처리
+        SwipeRefreshLayout swipe_layout =
+                (SwipeRefreshLayout)findViewById(R.id.swipe_layout);
+        swipe_layout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+
+            @Override
+            public void onRefresh() {
+                //업데이트 된 데이터가 있는지 확인
+                //마지막 업데이트 된 시간을 비교
+
+                page = page + 1;
+
+                //더 이상 가져올 데이터가 없으면 데이터 업데이트 안 함
+                if(page * 10 >= count){
+                    Snackbar.make(getWindow().getDecorView().getRootView(),
+                            "업데이트 할 데이터가 없습니다.",
+                            Snackbar.LENGTH_LONG).show();
+                    return;
+                }
+
+                //다운로드 중이면 다운로드 안함
+                if(th != null){
+                    return;
+                }
+
+                downloadview.setVisibility(View.VISIBLE);
+                th = new ThreadEx();
+                th.start();
+                swipe_layout.setRefreshing(false);
             }
         });
 
