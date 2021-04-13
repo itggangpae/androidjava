@@ -7,7 +7,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "kakao.itstudy.multimedia"
+        applicationId "kakao.itstudy.etccomponent"
         minSdkVersion 26
         targetSdkVersion 30
         versionCode 1
@@ -29,8 +29,6 @@ android {
 }
 
 dependencies {
-
-    implementation 'com.github.pedroSG94:AutoPermissions:1.0.3'
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'

@@ -1,3 +1,4 @@
+include ':etccomponent'
 include ':multimedia'
 include ':supportlibrary'
 include ':adapterview'

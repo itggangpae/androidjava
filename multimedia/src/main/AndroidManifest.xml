@@ -3,6 +3,14 @@
     package="kakao.itstudy.multimedia">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <application
         android:allowBackup="true"
@@ -12,6 +20,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Androidjava"
         android:usesCleartextTraffic="true">
+        <activity android:name=".VideoRecordActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".VideoPlayActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
